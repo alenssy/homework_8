@@ -1,52 +1,39 @@
-import {useState} from "react";
-import {Child} from "./Child";
+import {useEffect, useState} from "react";
+import Child from "./Child";
 
-function App() {
+// Props, State, Lifecycle hooks !== Hooks
+const App = () => {
     const [name, setName] = useState('Bob');
+    const [isToggle, setIsToggle] = useState(false);
+
+    useEffect(() => {
+        console.log('first');
+        // componentDidMount
+        return () => {
+            // componentWillUnMount
+        }
+    }, [])
+
+    useEffect(() => {
+        console.log('second');
+        // componentDidUpdate
+    }, [name])
 
     const updateUserName = () => {
-        setName('Lora');
+        setName(name === 'Lora' ? 'Bob' : 'Lora');
+        setIsToggle(!isToggle);
     }
 
+    console.log('render');
     return (
         <>
             <div className="App">
                 <h2>Hello, {name}!</h2>
                 <button onClick={updateUserName}>Update State</button>
             </div>
-            <Child name={name} />
+            {isToggle ? <Child name={name} /> : null}
         </>
     )
 }
-
-// Props, State
-// class App extends React.Component {
-//     constructor(props) {
-//         super(props);
-//         this.state = {
-//             name: 'Bob',
-//         }
-//         this.updateUserName = this.updateUserName.bind(this);
-//     }
-//
-//     updateUserName() {
-//         this.setState({ name: this.state.name === 'Lora' ? 'Bob' : 'Lora' }, () => {
-//             console.log(this.state.name);
-//         });
-//     }
-//
-//     render() {
-//         const { name } = this.state;
-//         return (
-//             <>
-//                 <div className="App">
-//                     <h2>Hello, {name}!</h2>
-//                     <button onClick={this.updateUserName}>Update State</button>
-//                 </div>
-//                 <Child name={name} />
-//             </>
-//         )
-//     }
-// }
 
 export default App;
