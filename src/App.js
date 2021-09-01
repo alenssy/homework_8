@@ -1,39 +1,47 @@
-import {useEffect, useState} from "react";
-import Child from "./Child";
+import {Component} from "react";
+import {fetchPopularRepos} from "./api/fetchPopularRepos";
+import RepoGrid from "./RepoGrid";
 
-// Props, State, Lifecycle hooks !== Hooks
-const App = () => {
-    const [name, setName] = useState('Bob');
-    const [isToggle, setIsToggle] = useState(false);
+const languages = ['All', 'Javascript', 'Ruby', 'Java', 'CSS', 'Python'];
 
-    useEffect(() => {
-        console.log('first');
-        // componentDidMount
-        return () => {
-            // componentWillUnMount
-        }
-    }, [])
-
-    useEffect(() => {
-        console.log('second');
-        // componentDidUpdate
-    }, [name])
-
-    const updateUserName = () => {
-        setName(name === 'Lora' ? 'Bob' : 'Lora');
-        setIsToggle(!isToggle);
+class App extends Component {
+    state = {
+        selectedLanguage: 'All',
+        repos: null
     }
 
-    console.log('render');
-    return (
-        <>
-            <div className="App">
-                <h2>Hello, {name}!</h2>
-                <button onClick={updateUserName}>Update State</button>
-            </div>
-            {isToggle ? <Child name={name} /> : null}
-        </>
-    )
+    componentDidMount() {
+        fetchPopularRepos(this.state.selectedLanguage)
+            .then(data => this.setState({ repos: data }));
+    }
+
+    selectLanguage = (event) => {
+        this.setState({ repos: null })
+        fetchPopularRepos(event.target.innerText)
+            .then(data => this.setState({ repos: data }));
+        if(event.target.innerText !== this.state.selectedLanguage) {
+            this.setState({selectedLanguage: event.target.innerText});
+        }
+    }
+
+    render() {
+        return (
+            <>
+                <ul className='languages'>
+                    {languages.map((language, index) =>
+                        <li
+                            key={index}
+                            style={{color: language === this.state.selectedLanguage ? '#d0021b' : '#000000'}}
+                            onClick={this.selectLanguage}>
+                            {language}
+                        </li>)}
+                </ul>
+                {this.state.repos ?
+                    <RepoGrid repos={this.state.repos} /> :
+                    <p style={{ textAlign: 'center'}}>Loading ...</p>}
+            </>
+        )
+    }
 }
 
 export default App;
