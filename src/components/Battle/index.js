@@ -1,38 +1,63 @@
-import {Component, createRef} from "react";
+import {Component} from "react";
+import {Link} from "react-router-dom";
+import PlayerInput from "./PlayerInput";
 
 class Battle extends Component {
-    constructor() {
-        super();
-        this.ref = createRef();
+    state = {
+        playerOneName: '',
+        playerTwoName: '',
+        playerOneImage: null,
+        playerTwoImage: null
     }
-    // state = {
-    //     email: ''
-    // }
 
-    // handleEmailField = (event) => {
-    //     this.setState({ [event.target.name]: event.target.value });
-    // }
-    //
-    submitHandler = (event) => {
-        event.preventDefault();
-        console.log(this.ref.current.value);
-        // console.log(this.state);
+
+    submitHandler = (id, username) => {
+        this.setState({
+            [id + 'Name']: username,
+            [id + 'Image']: 'https://github.com/' + username + '.png?size=200',
+        })
+    }
+
+    handleReset = (id) => {
+        this.setState({
+            [id + 'Name']: '',
+            [id + 'Image']: null,
+        })
     }
 
     render() {
-        // console.log(this.state.email)
+        const {playerOneName, playerTwoName, playerOneImage, playerTwoImage} = this.state;
         return (
-            <div className='home-container'>
-                <form onSubmit={this.submitHandler}>
-                    <input
-                        ref={this.ref}
-                        type="text"
-                        // name='email'
-                        // value={this.state.email}
-                        // onChange={this.handleEmailField}
-                    />
-                    <button type='submit'>Submit</button>
-                </form>
+            <div>
+                <div className='row'>
+                    {!playerOneName ?
+                        <PlayerInput
+                        id='playerOne'
+                        label='Player One'
+                        onSubmit={this.submitHandler}
+                    /> :
+                        <div className='column'>
+                            <h2>{playerOneName}</h2>
+                            <img src={playerOneImage} alt="Avatar"/>
+                            <button className='reset' onClick={() => this.handleReset('playerOne')}>Reset</button>
+                        </div>
+                    }
+                    {!playerTwoName ?
+                        <PlayerInput
+                            id='playerTwo'
+                            label='Player Two'
+                            onSubmit={this.submitHandler}
+                        /> :
+                        <div className='column'>
+                            <h2>{playerTwoName}</h2>
+                            <img src={playerTwoImage} alt="Avatar"/>
+                            <button className='reset' onClick={() => this.handleReset('playerTwo')}>Reset</button>
+                        </div>
+                    }
+                </div>
+                {playerOneImage && playerTwoImage &&
+                    <Link className='button' to='/battle/results'>Battle</Link>
+                }
             </div>
         )
     }
