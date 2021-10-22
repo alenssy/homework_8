@@ -1,0 +1,1 @@
+export const APP_CHANGE_TEXT = 'APP_CHANGE_TEXT';

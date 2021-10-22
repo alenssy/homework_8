@@ -1,6 +1,7 @@
 import {Component} from "react";
 import {Link} from "react-router-dom";
 import PlayerInput from "./PlayerInput";
+import PlayerPreview from "./PlayerPreview";
 
 class Battle extends Component {
     state = {
@@ -32,15 +33,16 @@ class Battle extends Component {
                 <div className='row'>
                     {!playerOneName ?
                         <PlayerInput
-                        id='playerOne'
-                        label='Player One'
-                        onSubmit={this.submitHandler}
-                    /> :
-                        <div className='column'>
-                            <h2>{playerOneName}</h2>
-                            <img src={playerOneImage} alt="Avatar"/>
+                            id='playerOne'
+                            label='Player One'
+                            onSubmit={this.submitHandler}
+                        /> :
+                        <PlayerPreview 
+                            avatar={playerOneImage}
+                            username={playerOneName}
+                        >
                             <button className='reset' onClick={() => this.handleReset('playerOne')}>Reset</button>
-                        </div>
+                        </PlayerPreview>
                     }
                     {!playerTwoName ?
                         <PlayerInput
@@ -48,11 +50,12 @@ class Battle extends Component {
                             label='Player Two'
                             onSubmit={this.submitHandler}
                         /> :
-                        <div className='column'>
-                            <h2>{playerTwoName}</h2>
-                            <img src={playerTwoImage} alt="Avatar"/>
+                        <PlayerPreview
+                            avatar={playerTwoImage}
+                            username={playerTwoName}
+                        >
                             <button className='reset' onClick={() => this.handleReset('playerTwo')}>Reset</button>
-                        </div>
+                        </PlayerPreview>
                     }
                 </div>
                 {playerOneImage && playerTwoImage &&

@@ -1,6 +1,7 @@
 import {memo} from "react";
 
 const SelectLanguage = memo(({selectedLanguage, selectedLanguageHandler}) => {
+    
     const languages = ['All', 'Javascript', 'Ruby', 'Java', 'CSS', 'Python'];
 
     return (

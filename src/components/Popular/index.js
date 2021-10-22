@@ -2,6 +2,11 @@ import {Component} from "react";
 import {fetchPopularRepos} from "../../api/fetchPopularRepos";
 import SelectLanguage from "./SelectLanguage";
 import RepoGrid from "./RepoGrid";
+import {connect} from "react-redux";
+
+const mapStateToProps = (state) => {
+    return state.appReducer;
+}
 
 class Popular extends Component {
     state = {
@@ -30,6 +35,7 @@ class Popular extends Component {
         const {selectedLanguage, repos} = this.state;
         return (
             <>
+                <span>{this.props.text}</span>
                 <SelectLanguage
                     selectedLanguage={selectedLanguage}
                     selectedLanguageHandler={repos ? this.selectLanguage : null}
@@ -42,4 +48,4 @@ class Popular extends Component {
     }
 }
 
-export default Popular;
+export default connect(mapStateToProps)(Popular);
