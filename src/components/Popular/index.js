@@ -1,51 +1,42 @@
-import {Component} from "react";
 import {fetchPopularRepos} from "../../api/fetchPopularRepos";
 import SelectLanguage from "./SelectLanguage";
 import RepoGrid from "./RepoGrid";
-import {connect} from "react-redux";
+import { useEffect } from "react";
+import {appChangeLanguageAction, appChangeReposAction} from "../../redux/actions/app.actions";
+import {useDispatch, useSelector} from 'react-redux';
 
-const mapStateToProps = (state) => {
-    return state.appReducer;
-}
+const Popular = () => {
+    const dispatch = useDispatch();
+    const {selectedLanguage, repos} = useSelector(state => state.appReducer);
 
-class Popular extends Component {
-    state = {
-        selectedLanguage: 'All',
-        repos: null
-    }
+    useEffect(() => {
+        fetchPopularReposHandler(selectedLanguage)
+    }, [])
 
-    componentDidMount() {
-        this.fetchPopularReposHandler(this.state.selectedLanguage);
-    }
-
-    fetchPopularReposHandler = (text) => {
+    const fetchPopularReposHandler = (text) => {
         fetchPopularRepos(text)
-            .then(data => this.setState({ repos: data }));
+            .then(data => dispatch(appChangeReposAction(data)));
     }
 
-    selectLanguage = (event) => {
-        this.setState({ repos: null });
-        this.fetchPopularReposHandler(event.target.innerText);
-        if(event.target.innerText !== this.state.selectedLanguage) {
-            this.setState({selectedLanguage: event.target.innerText});
+    const selectLanguage = (event) => {
+        dispatch(appChangeReposAction(null))
+        fetchPopularReposHandler(event.target.innerText);
+        if(event.target.innerText !== selectedLanguage) {
+            dispatch(appChangeLanguageAction(event.target.innerText))
         }
     }
 
-    render() {
-        const {selectedLanguage, repos} = this.state;
-        return (
-            <>
-                <span>{this.props.text}</span>
-                <SelectLanguage
-                    selectedLanguage={selectedLanguage}
-                    selectedLanguageHandler={repos ? this.selectLanguage : null}
-                />
-                {repos ?
-                    <RepoGrid repos={repos} /> :
-                    <p style={{ textAlign: 'center'}}>Loading ...</p>}
-            </>
-        )
-    }
+    return (
+        <>
+            <SelectLanguage
+                selectedLanguage={selectedLanguage}
+                selectedLanguageHandler={repos ? selectLanguage : null}
+            />
+            {repos ?
+                <RepoGrid repos={repos} /> :
+                <p style={{ textAlign: 'center'}}>Loading ...</p>}
+        </>
+    )
 }
 
-export default connect(mapStateToProps)(Popular);
+export default Popular;
