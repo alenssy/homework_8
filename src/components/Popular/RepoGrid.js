@@ -13,7 +13,7 @@ const RepoGrid = () => {
     const fetchPopularReposHandler = (text) => {
         if (!loading) dispatch(getPopularRepos(text))
     }
-    console.log(selectedLanguage)
+
     return (
         <>
             <ul className='popular-list'>
