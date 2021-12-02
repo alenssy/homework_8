@@ -1,9 +1,17 @@
-import {APP_CHANGE_TEXT, APP_CHANGE_LANGUAGE, APP_CHANGE_REPOS} from "../constants/app.constants";
+import {
+    APP_CHANGE_TEXT,
+    APP_CHANGE_LANGUAGE, 
+    GET_POPULAR_REPOS_REQUEST,
+    GET_POPULAR_REPOS_REQUEST_SUCCESS,
+    GET_POPULAR_REPOS_REQUEST_FAILURE,
+} from "../constants/app.constants";
 
 const initialState = {
     text: 'Hello',
     selectedLanguage: 'All',
     repos: null,
+    error: null,
+    loading: false,
 }
 
 export const appReducer = (state = initialState, action) => {
@@ -20,10 +28,27 @@ export const appReducer = (state = initialState, action) => {
                 selectedLanguage: action.payload,
             }
 
-        case APP_CHANGE_REPOS:
+        case GET_POPULAR_REPOS_REQUEST:
             return {
                 ...state,
+                loading: true,
+                repos: null,
+                error: null,
+            }
+
+        case GET_POPULAR_REPOS_REQUEST_SUCCESS:
+            return {
+                ...state,
+                loading: false,
                 repos: action.payload,
+                error: null,
+            }
+        
+        case GET_POPULAR_REPOS_REQUEST_FAILURE:
+            return {
+                ...state,
+                loading: false,
+                error: null,
             }
             
         default:
