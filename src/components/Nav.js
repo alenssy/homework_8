@@ -1,17 +1,18 @@
 import {NavLink} from "react-router-dom";
+import {Menu} from "antd"
 
 const Nav = () => {
     const navLinks = ['Home', 'Popular', 'Battle'];
 
     return (
-        <ul className='nav'>
+        <Menu theme="dark" mode="horizontal">
             {navLinks.map((navLink, index) => (
-                    <li key={index}>
+                    <Menu.Item key={index}>
                         <NavLink exact to={navLink === 'Home' ? '/' : navLink.toLowerCase()}>{navLink}</NavLink>
-                    </li>
+                    </Menu.Item>
                 )
             )}
-        </ul>
+        </Menu>
     )
 }
 

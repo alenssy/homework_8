@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { appChangeLanguageAction } from "../../redux/actions/app.actions";
+import { Menu } from 'antd'
 
 const SelectLanguage = () => {
     const dispatch = useDispatch()
@@ -12,15 +13,15 @@ const SelectLanguage = () => {
     }
 
     return (
-        <ul className='languages'>
+        <Menu mode="horizontal" className='languages' onSelect={(item, key) => console.log(item, key)}>
             {languages.map((language, index) =>
-                <li
+                <Menu.Item
                     key={index}
                     style={{color: language === selectedLanguage ? '#d0021b' : '#000000'}}
                     onClick={() => selectedLanguageHandler(language)}>
                     {language}
-                </li>)}
-        </ul>
+                </Menu.Item>)}
+        </Menu>
     )
 }
 
